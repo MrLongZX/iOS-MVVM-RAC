@@ -10,6 +10,7 @@
 #import "OneViewController.h"
 #import "CommandViewController.h"
 #import "SignalCombineViewController.h"
+#import "ReadSourceCodeViewController.h"
 
 @interface AppDelegate ()
 
@@ -21,8 +22,9 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
     //OneViewController *vc = [[OneViewController alloc] init];
-    CommandViewController *vc = [[CommandViewController alloc] init];
+    //CommandViewController *vc = [[CommandViewController alloc] init];
     //SignalCombineViewController *vc = [[SignalCombineViewController alloc] init];
+    ReadSourceCodeViewController *vc = [[ReadSourceCodeViewController alloc] init];
     UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:vc];
     
     self.window = [[UIWindow alloc] initWithFrame:self.window.bounds];

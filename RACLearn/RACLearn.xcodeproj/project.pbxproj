@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		02B8AD32AAD17A6B18568564 /* libPods-RACLearn.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EF1B84DDEA144DBDA3BFB718 /* libPods-RACLearn.a */; };
+		2281992921806C8E001C7888 /* ReadSourceCodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2281992821806C8E001C7888 /* ReadSourceCodeViewController.m */; };
 		4D8915501E7C244200D0D641 /* OneViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D89154F1E7C244200D0D641 /* OneViewController.m */; };
 		4D8915531E7C244F00D0D641 /* TwoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D8915521E7C244F00D0D641 /* TwoViewController.m */; };
 		4D8915561E7C2DA200D0D641 /* CommandViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D8915551E7C2DA200D0D641 /* CommandViewController.m */; };
@@ -41,6 +42,8 @@
 
 /* Begin PBXFileReference section */
 		1A0DDAAB9642DA0DB2BFBFA8 /* Pods-RACLearn.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RACLearn.debug.xcconfig"; path = "Pods/Target Support Files/Pods-RACLearn/Pods-RACLearn.debug.xcconfig"; sourceTree = "<group>"; };
+		2281992721806C8E001C7888 /* ReadSourceCodeViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ReadSourceCodeViewController.h; sourceTree = "<group>"; };
+		2281992821806C8E001C7888 /* ReadSourceCodeViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ReadSourceCodeViewController.m; sourceTree = "<group>"; };
 		4D89154E1E7C244200D0D641 /* OneViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OneViewController.h; sourceTree = "<group>"; };
 		4D89154F1E7C244200D0D641 /* OneViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OneViewController.m; sourceTree = "<group>"; };
 		4D8915511E7C244F00D0D641 /* TwoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TwoViewController.h; sourceTree = "<group>"; };
@@ -130,6 +133,8 @@
 				4D8915551E7C2DA200D0D641 /* CommandViewController.m */,
 				4D9DD0522086D42F00540E8F /* SignalCombineViewController.h */,
 				4D9DD0532086D42F00540E8F /* SignalCombineViewController.m */,
+				2281992721806C8E001C7888 /* ReadSourceCodeViewController.h */,
+				2281992821806C8E001C7888 /* ReadSourceCodeViewController.m */,
 				4DE8C1091E77C7A6001022F5 /* ViewController.h */,
 				4DE8C10A1E77C7A6001022F5 /* ViewController.m */,
 				4DE8C10C1E77C7A6001022F5 /* Main.storyboard */,
@@ -195,8 +200,6 @@
 				4DE8C0FC1E77C7A6001022F5 /* Sources */,
 				4DE8C0FD1E77C7A6001022F5 /* Frameworks */,
 				4DE8C0FE1E77C7A6001022F5 /* Resources */,
-				6677A63B00FE39877D5A4A8A /* [CP] Embed Pods Frameworks */,
-				408D721A4A043229061C4D41 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -316,49 +319,22 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		408D721A4A043229061C4D41 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-RACLearn/Pods-RACLearn-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		6677A63B00FE39877D5A4A8A /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-RACLearn/Pods-RACLearn-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		DAEF6A2362B92AF28FCFCAA0 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-RACLearn-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -368,6 +344,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2281992921806C8E001C7888 /* ReadSourceCodeViewController.m in Sources */,
 				4D9DD0542086D42F00540E8F /* SignalCombineViewController.m in Sources */,
 				4D8915561E7C2DA200D0D641 /* CommandViewController.m in Sources */,
 				4DE8C10B1E77C7A6001022F5 /* ViewController.m in Sources */,

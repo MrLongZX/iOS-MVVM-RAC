@@ -23,7 +23,7 @@
 	return self;
 }
 
-#pragma mark Abstract methods
+#pragma mark Abstract methods 抽象方法需要子类实现
 
 + (instancetype)empty {
 	return nil;
@@ -45,7 +45,7 @@
 	return nil;
 }
 
-#pragma mark Naming
+#pragma mark Naming 设置name，用于调试
 
 - (instancetype)setNameWithFormat:(NSString *)format, ... {
 	if (getenv("RAC_DEBUG_SIGNAL_NAMES") == NULL) return self;

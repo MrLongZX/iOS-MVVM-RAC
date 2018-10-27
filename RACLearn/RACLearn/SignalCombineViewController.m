@@ -49,7 +49,7 @@
     //[self testCollectSignalsAndCombineLatestOrZip];
     
     // 绑定
-    //[self bind];
+    [self bind];
     
     //[self subjectReplayLazily];
     
