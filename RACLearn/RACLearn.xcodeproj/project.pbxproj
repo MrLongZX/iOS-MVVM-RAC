@@ -8,7 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		02B8AD32AAD17A6B18568564 /* libPods-RACLearn.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EF1B84DDEA144DBDA3BFB718 /* libPods-RACLearn.a */; };
-		2281992921806C8E001C7888 /* ReadSourceCodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2281992821806C8E001C7888 /* ReadSourceCodeViewController.m */; };
+		2281992921806C8E001C7888 /* SignalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2281992821806C8E001C7888 /* SignalViewController.m */; };
+		2281993321870F8F001C7888 /* SchedulerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2281993221870F8F001C7888 /* SchedulerViewController.m */; };
 		4D8915501E7C244200D0D641 /* OneViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D89154F1E7C244200D0D641 /* OneViewController.m */; };
 		4D8915531E7C244F00D0D641 /* TwoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D8915521E7C244F00D0D641 /* TwoViewController.m */; };
 		4D8915561E7C2DA200D0D641 /* CommandViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D8915551E7C2DA200D0D641 /* CommandViewController.m */; };
@@ -42,8 +43,10 @@
 
 /* Begin PBXFileReference section */
 		1A0DDAAB9642DA0DB2BFBFA8 /* Pods-RACLearn.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RACLearn.debug.xcconfig"; path = "Pods/Target Support Files/Pods-RACLearn/Pods-RACLearn.debug.xcconfig"; sourceTree = "<group>"; };
-		2281992721806C8E001C7888 /* ReadSourceCodeViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ReadSourceCodeViewController.h; sourceTree = "<group>"; };
-		2281992821806C8E001C7888 /* ReadSourceCodeViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ReadSourceCodeViewController.m; sourceTree = "<group>"; };
+		2281992721806C8E001C7888 /* SignalViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SignalViewController.h; sourceTree = "<group>"; };
+		2281992821806C8E001C7888 /* SignalViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SignalViewController.m; sourceTree = "<group>"; };
+		2281993121870F8F001C7888 /* SchedulerViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SchedulerViewController.h; sourceTree = "<group>"; };
+		2281993221870F8F001C7888 /* SchedulerViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SchedulerViewController.m; sourceTree = "<group>"; };
 		4D89154E1E7C244200D0D641 /* OneViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OneViewController.h; sourceTree = "<group>"; };
 		4D89154F1E7C244200D0D641 /* OneViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OneViewController.m; sourceTree = "<group>"; };
 		4D8915511E7C244F00D0D641 /* TwoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TwoViewController.h; sourceTree = "<group>"; };
@@ -98,6 +101,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2281993021870C00001C7888 /* ReadSoureCode */ = {
+			isa = PBXGroup;
+			children = (
+				2281992721806C8E001C7888 /* SignalViewController.h */,
+				2281992821806C8E001C7888 /* SignalViewController.m */,
+				2281993121870F8F001C7888 /* SchedulerViewController.h */,
+				2281993221870F8F001C7888 /* SchedulerViewController.m */,
+			);
+			path = ReadSoureCode;
+			sourceTree = "<group>";
+		};
 		4DE8C0F71E77C7A6001022F5 = {
 			isa = PBXGroup;
 			children = (
@@ -133,10 +147,9 @@
 				4D8915551E7C2DA200D0D641 /* CommandViewController.m */,
 				4D9DD0522086D42F00540E8F /* SignalCombineViewController.h */,
 				4D9DD0532086D42F00540E8F /* SignalCombineViewController.m */,
-				2281992721806C8E001C7888 /* ReadSourceCodeViewController.h */,
-				2281992821806C8E001C7888 /* ReadSourceCodeViewController.m */,
 				4DE8C1091E77C7A6001022F5 /* ViewController.h */,
 				4DE8C10A1E77C7A6001022F5 /* ViewController.m */,
+				2281993021870C00001C7888 /* ReadSoureCode */,
 				4DE8C10C1E77C7A6001022F5 /* Main.storyboard */,
 				4DE8C10F1E77C7A6001022F5 /* Assets.xcassets */,
 				4DE8C1111E77C7A6001022F5 /* LaunchScreen.storyboard */,
@@ -344,7 +357,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2281992921806C8E001C7888 /* ReadSourceCodeViewController.m in Sources */,
+				2281992921806C8E001C7888 /* SignalViewController.m in Sources */,
 				4D9DD0542086D42F00540E8F /* SignalCombineViewController.m in Sources */,
 				4D8915561E7C2DA200D0D641 /* CommandViewController.m in Sources */,
 				4DE8C10B1E77C7A6001022F5 /* ViewController.m in Sources */,
@@ -352,6 +365,7 @@
 				4DE8C1051E77C7A6001022F5 /* main.m in Sources */,
 				4D8915531E7C244F00D0D641 /* TwoViewController.m in Sources */,
 				4D8915501E7C244200D0D641 /* OneViewController.m in Sources */,
+				2281993321870F8F001C7888 /* SchedulerViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

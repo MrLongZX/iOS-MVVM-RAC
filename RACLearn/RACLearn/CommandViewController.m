@@ -16,7 +16,8 @@
 
 @implementation CommandViewController
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     
     //[self arraySequence];
@@ -24,7 +25,8 @@
     [self test5];
 }
 
-- (void)test{
+- (void)test
+{
     // 创建信号
     RACSignal *signal = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
         
@@ -62,7 +64,8 @@
     
 }
 
-- (void)test1{
+- (void)test1
+{
     RACCommand *commond = [[RACCommand alloc] initWithSignalBlock:^RACSignal *(id input) {
         NSLog(@"%@",input);
         return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
@@ -79,7 +82,8 @@
     }];
 }
 
-- (void)test2{
+- (void)test2
+{
     RACCommand *command = [[RACCommand alloc] initWithSignalBlock:^RACSignal *(id input) {
         NSLog(@"%@",input);
         return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
@@ -96,7 +100,8 @@
 }
 
 // 高级做法
-- (void)test3 {
+- (void)test3
+{
     // 1.创建命令
     RACCommand *command = [[RACCommand alloc] initWithSignalBlock:^RACSignal *(id input) {
         // block调用：执行命令的时候就会调用
@@ -121,7 +126,8 @@
     
 }
 
-- (void)testCommandExecuting{
+- (void)testCommandExecuting
+{
     RACCommand *command = [[RACCommand alloc] initWithSignalBlock:^RACSignal *(id input) {
         NSLog(@"input:%@",input);
         return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
@@ -150,7 +156,8 @@
 }
 
 // 普通写法, 这样的缺点是：没订阅一次信号就得重新创建并发送请求，这样很不友好
-- (void)test4{
+- (void)test4
+{
     RACSignal *signal = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
         // didSubscribeblock中的代码都统称为副作用。
         // 发送请求---比如afn
@@ -174,7 +181,8 @@
 }
 
 // 比较好的做法。 使用RACMulticastConnection，无论有多少个订阅者，无论订阅多少次，我只发送一个。
-- (void)test5 {
+- (void)test5
+{
     // 1.发送请求，用一个信号内包装，不管有多少个订阅者，只想发一次请求
     RACSignal *signal = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
         // 发送请求
@@ -199,10 +207,11 @@
     }];
     //3. 连接。只有连接了才会把信号源变为热信号
     [connection connect];
-
+    
 }
 
-- (void)map {
+- (void)map
+{
     
     // Map使用步骤:
     // 1.传入一个block,类型是返回对象，参数是value
@@ -237,7 +246,8 @@
     [subject sendNext:@"123"];
 }
 
-- (void)flatMap1 {
+- (void)flatMap1
+{
     RACSubject *subject = [RACSubject subject];
     RACSignal *signal = [subject flattenMap:^RACStream *(id value) {
         return [RACReturnSignal return:value];
@@ -250,7 +260,8 @@
     [subject sendNext:@"12345"];
 }
 
-- (void)flatMap {
+- (void)flatMap
+{
     RACSubject *signalofSignals = [RACSubject subject];
     RACSubject *signal = [RACSubject subject];
     
@@ -267,7 +278,8 @@
 
 // 跳跃 ： 如下，skip传入2 跳过前面两个值
 // 实际用处： 在实际开发中比如 后台返回的数据前面几个没用，我们想跳跃过去，便可以用skip
-- (void)skip {
+- (void)skip
+{
     RACSubject *subject = [RACSubject subject];
     [[subject skip:2] subscribeNext:^(id x) {
         NSLog(@"%@", x);
@@ -278,7 +290,8 @@
 }
 
 //distinctUntilChanged:-- 如果当前的值跟上一次的值一样，就不会被订阅到
-- (void)distinctUntilChanged {
+- (void)distinctUntilChanged
+{
     RACSubject *subject = [RACSubject subject];
     [[subject distinctUntilChanged] subscribeNext:^(id x) {
         NSLog(@"%@",x);
@@ -289,7 +302,8 @@
 }
 
 // take:可以屏蔽一些值,取前面几个值---这里take为2 则只拿到前两个值
-- (void)take {
+- (void)take
+{
     RACSubject *subject = [RACSubject subject];
     [[subject take:2] subscribeNext:^(id x) {
         NSLog(@"%@",x);
@@ -298,12 +312,13 @@
     [subject sendNext:@1];
     [subject sendNext:@2];
     [subject sendNext:@3];
-
+    
 }
 
 //takeLast:和take的用法一样，不过他取的是最后的几个值，如下，则取的是最后两个值
 //注意点:takeLast 一定要调用sendCompleted，告诉他发送完成了，这样才能取到最后的几个值
-- (void)takeLast {
+- (void)takeLast
+{
     RACSubject *subject = [RACSubject subject];
     [[subject takeLast:2] subscribeNext:^(id x) {
         NSLog(@"%@",x);
@@ -315,7 +330,8 @@
 }
 
 // takeUntil:---给takeUntil传的是哪个信号，那么当这个信号发送信号或sendCompleted，就不能再接受源信号的内容了。
-- (void)takeUntil{
+- (void)takeUntil
+{
     RACSubject *subject = [RACSubject subject];
     RACSubject *subject2 = [RACSubject subject];
     [[subject takeUntil:subject2] subscribeNext:^(id x) {
@@ -323,14 +339,15 @@
     }];
     [subject sendNext:@1];
     [subject sendNext:@2];
-//    [subject2 sendNext:@3];
+    //    [subject2 sendNext:@3];
     [subject2 sendCompleted];
     [subject sendNext:@4];
 }
 
 //ignore:忽略一些值
 //ignoreValues:表示忽略所有的值
-- (void)ignore {
+- (void)ignore
+{
     RACSubject *subject = [RACSubject subject];
     RACSubject *ignoreSignal = [subject ignore:@2];
     [ignoreSignal subscribeNext:^(id x) {
@@ -346,7 +363,8 @@
     NSLog(@"array:%@",array);
 }
 
-- (void)didReceiveMemoryWarning {
+- (void)didReceiveMemoryWarning
+{
     [super didReceiveMemoryWarning];
 }
 

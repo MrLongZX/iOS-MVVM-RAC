@@ -24,7 +24,8 @@
 - (id)init {
 	self = [super initWithName:@"com.ReactiveCocoa.RACScheduler.subscriptionScheduler"];
 	if (self == nil) return nil;
-
+    
+    // 一个优先级为 RACSchedulerPriorityDefault 的串行队列
 	_backgroundScheduler = [RACScheduler scheduler];
 
 	return self;

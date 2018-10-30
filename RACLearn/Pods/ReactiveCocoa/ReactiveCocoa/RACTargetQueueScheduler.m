@@ -23,6 +23,7 @@
 	dispatch_queue_t queue = dispatch_queue_create(name.UTF8String, DISPATCH_QUEUE_SERIAL);
 	if (queue == NULL) return nil;
 
+    // 根据传入的 targetQueue 设置队列的优先级
 	dispatch_set_target_queue(queue, targetQueue);
 
 	return [super initWithName:name queue:queue];

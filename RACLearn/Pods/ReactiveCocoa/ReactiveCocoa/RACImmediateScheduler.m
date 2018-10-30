@@ -29,7 +29,7 @@
 - (RACDisposable *)after:(NSDate *)date schedule:(void (^)(void))block {
 	NSCParameterAssert(date != nil);
 	NSCParameterAssert(block != NULL);
-
+    // 当前线程休眠到指定时间后执行 block
 	[NSThread sleepUntilDate:date];
 	block();
 
@@ -44,6 +44,7 @@
 - (RACDisposable *)scheduleRecursiveBlock:(RACSchedulerRecursiveBlock)recursiveBlock {
 	for (__block NSUInteger remaining = 1; remaining > 0; remaining--) {
 		recursiveBlock(^{
+            // 只要调用者执行recursiveBlock中的reschedule()使remaining加一，就可以一直递归调用下去
 			remaining++;
 		});
 	}

@@ -8,8 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-// 阅读源码 ：https://draveness.me/tag/RAC/
-// 练习理解示例
-@interface ReadSourceCodeViewController : UIViewController
+// 学习链接：[『状态』驱动的世界：ReactiveCocoa](https://draveness.me/racsignal)
+@interface SignalViewController : UIViewController
 
 @end

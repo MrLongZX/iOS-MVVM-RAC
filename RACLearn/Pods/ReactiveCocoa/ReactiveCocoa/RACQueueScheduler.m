@@ -93,7 +93,7 @@
 
 	uint64_t intervalInNanoSecs = (uint64_t)(interval * NSEC_PER_SEC);
 	uint64_t leewayInNanoSecs = (uint64_t)(leeway * NSEC_PER_SEC);
-
+    // 使用dispatch_source_t定时器
 	dispatch_source_t timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, self.queue);
 	dispatch_source_set_timer(timer, [self.class wallTimeWithDate:date], intervalInNanoSecs, leewayInNanoSecs);
 	dispatch_source_set_event_handler(timer, block);

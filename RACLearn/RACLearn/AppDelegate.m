@@ -10,7 +10,8 @@
 #import "OneViewController.h"
 #import "CommandViewController.h"
 #import "SignalCombineViewController.h"
-#import "ReadSourceCodeViewController.h"
+#import "SignalViewController.h"
+#import "SchedulerViewController.h"
 
 @interface AppDelegate ()
 
@@ -18,18 +19,19 @@
 
 @implementation AppDelegate
 
-
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
     //OneViewController *vc = [[OneViewController alloc] init];
     //CommandViewController *vc = [[CommandViewController alloc] init];
     //SignalCombineViewController *vc = [[SignalCombineViewController alloc] init];
-    ReadSourceCodeViewController *vc = [[ReadSourceCodeViewController alloc] init];
-    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:vc];
+    SignalViewController *vc = [[SignalViewController alloc] init];
+    
+    //SchedulerViewController *vc = [[SchedulerViewController alloc] init];
+    UINavigationController *navigation = [[UINavigationController alloc] initWithRootViewController:vc];
     
     self.window = [[UIWindow alloc] initWithFrame:self.window.bounds];
     self.window.backgroundColor = [UIColor whiteColor];
-    self.window.rootViewController = nav;
+    self.window.rootViewController = navigation;
     [self.window makeKeyAndVisible];
     return YES;
 }

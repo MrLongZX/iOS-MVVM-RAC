@@ -85,11 +85,11 @@
 // 一般和文本框一起用，添加过滤条件
 - (void)filter
 {
-//    [[self.nameTF.rac_textSignal filter:^BOOL(NSString *value) {
-//        return value.length > 2;
-//    }] subscribeNext:^(id x) {
-//        NSLog(@"x : %@",x);
-//    }];
+    //    [[self.nameTF.rac_textSignal filter:^BOOL(NSString *value) {
+    //        return value.length > 2;
+    //    }] subscribeNext:^(id x) {
+    //        NSLog(@"x : %@",x);
+    //    }];
     
     [[[self.nameTF.rac_textSignal map:^id(NSString *value) {// 映射
         return @(value.length);
@@ -110,9 +110,9 @@
         return @(name.length && pass.length);
     }];
     
-//    [signal subscribeNext:^(id x) {
-//        _loginBtn.enabled = [x boolValue];
-//    }];
+    //    [signal subscribeNext:^(id x) {
+    //        _loginBtn.enabled = [x boolValue];
+    //    }];
     
     RAC(_loginBtn, enabled) = signal;
 }
@@ -129,7 +129,7 @@
         NSLog(@"zip x :%@",x);
     }];
     
-     // 发送信号 交互顺序，元组内元素的顺序不会变，跟发送的顺序无关，而是跟压缩的顺序有关[signalA zipWith:signalB]---先是A后是B
+    // 发送信号 交互顺序，元组内元素的顺序不会变，跟发送的顺序无关，而是跟压缩的顺序有关[signalA zipWith:signalB]---先是A后是B
     [subjectA sendNext:@"123"];
     [subjectB sendNext:@"456"];
 }
@@ -178,7 +178,7 @@
     RACSignal *thenSignal = [signalA then:^RACSignal *{
         return signalB;
     }];
-
+    
     [thenSignal subscribeNext:^(id x) {
         NSLog(@"x:%@",x);
     } error:^(NSError *error) {
@@ -220,12 +220,12 @@
 //
 - (void)doCombineLatest
 {
-//    RACSignal *signal1 = [@[ @1, @2 ] rac_sequence].signal;
-//    RACSignal *signal2 = [@[ @3, @4 ] rac_sequence].signal;
-//
-//    [[signal1 combineLatestWith:signal2] subscribeNext:^(RACTuple *value) {
-//        NSLog(@"%@", value);
-//    }];
+    //    RACSignal *signal1 = [@[ @1, @2 ] rac_sequence].signal;
+    //    RACSignal *signal2 = [@[ @3, @4 ] rac_sequence].signal;
+    //
+    //    [[signal1 combineLatestWith:signal2] subscribeNext:^(RACTuple *value) {
+    //        NSLog(@"%@", value);
+    //    }];
     
     RACSignal *signalA = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
         
@@ -343,30 +343,30 @@
     
     // 字典转模型
     /*
-    NSString *filePath = [[NSBundle mainBundle] pathForResource:@"flags.plist" ofType:nil];
-    NSArray *dicArray = [NSArray arrayWithContentsOfFile:filePath];
-    NSMutableArray *items = [NSMutableArray array];
-    // OC写法
-    for (NSDictionary *dic in dicArray) {
-        
-        //FlagItem *item = [FlagItem flagWithDict:dict];
-        //[items addObject:item];
-    }
+     NSString *filePath = [[NSBundle mainBundle] pathForResource:@"flags.plist" ofType:nil];
+     NSArray *dicArray = [NSArray arrayWithContentsOfFile:filePath];
+     NSMutableArray *items = [NSMutableArray array];
+     // OC写法
+     for (NSDictionary *dic in dicArray) {
+     
+     //FlagItem *item = [FlagItem flagWithDict:dict];
+     //[items addObject:item];
+     }
+     
+     // RAC写法
+     [dicArray.rac_sequence.signal subscribeNext:^(id x) {
+     // 利用RAC遍历， x：字典
+     
+     //FlagItem *item = [FlagItem flagWithDict:x];
+     //[items addObject:item];
+     }];
+     
+     // RAC高级用法（函数式编程）
+     NSArray *flags = [[dicArray.rac_sequence map:^id(id value) {
+     return  [FlagItem flagWithDict:value];
+     }] array];
+     */
     
-    // RAC写法
-    [dicArray.rac_sequence.signal subscribeNext:^(id x) {
-        // 利用RAC遍历， x：字典
-        
-        //FlagItem *item = [FlagItem flagWithDict:x];
-        //[items addObject:item];
-    }];
-    
-    // RAC高级用法（函数式编程）
-    NSArray *flags = [[dicArray.rac_sequence map:^id(id value) {
-        return  [FlagItem flagWithDict:value];
-    }] array];
-    */
-   
 }
 
 // 秩序 doNext doCompleted
@@ -391,10 +391,10 @@
 // 线程
 - (void)doDeliverOn
 {
-
+    
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         [[[RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-           
+            
             NSLog(@"thread : %@",[NSThread currentThread]);
             [subscriber sendNext:@"1"];
             [subscriber sendCompleted];
@@ -402,12 +402,12 @@
                 NSLog(@"dispose");
             }];
         }]
-         deliverOn:[RACScheduler mainThreadScheduler]]
+          deliverOn:[RACScheduler mainThreadScheduler]]
          subscribeNext:^(id x) {
              
              NSLog(@"x :%@",x);
              NSLog(@"thread : %@",[NSThread currentThread]);
-        }];
+         }];
     });
 }
 
@@ -572,7 +572,8 @@
 }
 
 #pragma mark - lazyload
-- (UIButton *)loginBtn{
+- (UIButton *)loginBtn
+{
     if (!_loginBtn) {
         _loginBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         _loginBtn.frame = CGRectMake(20, 190, 250, 30);
@@ -598,7 +599,8 @@
     return _loginBtn;
 }
 
-- (UITextField *)nameTF{
+- (UITextField *)nameTF
+{
     if (!_nameTF) {
         _nameTF = [[UITextField alloc] init];
         _nameTF.frame = CGRectMake(20, 100, 250, 30);
@@ -609,7 +611,8 @@
     return _nameTF;
 }
 
-- (UITextField *)passTF{
+- (UITextField *)passTF
+{
     if (!_passTF) {
         _passTF = [[UITextField alloc] init];
         _passTF.frame = CGRectMake(20, 150, 250, 30);

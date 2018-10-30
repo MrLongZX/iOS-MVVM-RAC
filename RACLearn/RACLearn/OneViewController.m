@@ -21,19 +21,22 @@
 
 //RACSubject 
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
     [self buildUI];
 }
 
-- (void)buildUI {
+- (void)buildUI
+{
     self.button.frame = CGRectMake(100, 100, 80, 30);
     [self.view addSubview:self.button];
 }
 
 #pragma mark---lazy loading
-- (UIButton *)button {
+- (UIButton *)button
+{
     if (!_button) {
         _button = [[UIButton alloc] init];
         [_button setBackgroundColor:[UIColor redColor]];
@@ -53,7 +56,8 @@
     return _button;
 }
 
-- (void)didReceiveMemoryWarning {
+- (void)didReceiveMemoryWarning
+{
     [super didReceiveMemoryWarning];
 }
 

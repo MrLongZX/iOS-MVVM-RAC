@@ -45,7 +45,7 @@ NSString * const RACSchedulerCurrentSchedulerKey = @"RACSchedulerCurrentSchedule
 }
 
 #pragma mark Schedulers
-
+// 立即调度器
 + (instancetype)immediateScheduler {
 	static dispatch_once_t onceToken;
 	static RACScheduler *immediateScheduler;
@@ -56,6 +56,7 @@ NSString * const RACSchedulerCurrentSchedulerKey = @"RACSchedulerCurrentSchedule
 	return immediateScheduler;
 }
 
+// 主线程调度器
 + (instancetype)mainThreadScheduler {
 	static dispatch_once_t onceToken;
 	static RACScheduler *mainThreadScheduler;
@@ -66,6 +67,7 @@ NSString * const RACSchedulerCurrentSchedulerKey = @"RACSchedulerCurrentSchedule
 	return mainThreadScheduler;
 }
 
+// 目标队列调度器
 + (instancetype)schedulerWithPriority:(RACSchedulerPriority)priority name:(NSString *)name {
 	return [[RACTargetQueueScheduler alloc] initWithName:name targetQueue:dispatch_get_global_queue(priority, 0)];
 }
@@ -78,6 +80,7 @@ NSString * const RACSchedulerCurrentSchedulerKey = @"RACSchedulerCurrentSchedule
 	return [self schedulerWithPriority:RACSchedulerPriorityDefault];
 }
 
+// 订阅调度器
 + (instancetype)subscriptionScheduler {
 	static dispatch_once_t onceToken;
 	static RACScheduler *subscriptionScheduler;
@@ -88,10 +91,12 @@ NSString * const RACSchedulerCurrentSchedulerKey = @"RACSchedulerCurrentSchedule
 	return subscriptionScheduler;
 }
 
+// 是否为主线程
 + (BOOL)isOnMainThread {
 	return [NSOperationQueue.currentQueue isEqual:NSOperationQueue.mainQueue] || [NSThread isMainThread];
 }
 
+// 当前调度器（只有使用[RACScheduler schedule:]方法 和 在主线程 才有效）
 + (instancetype)currentScheduler {
 	RACScheduler *scheduler = NSThread.currentThread.threadDictionary[RACSchedulerCurrentSchedulerKey];
 	if (scheduler != nil) return scheduler;
@@ -101,7 +106,7 @@ NSString * const RACSchedulerCurrentSchedulerKey = @"RACSchedulerCurrentSchedule
 }
 
 #pragma mark Scheduling
-
+// 安排给定的块以便在调度程序上执行
 - (RACDisposable *)schedule:(void (^)(void))block {
 	NSCAssert(NO, @"%@ must be implemented by subclasses.", NSStringFromSelector(_cmd));
 	return nil;
@@ -121,6 +126,7 @@ NSString * const RACSchedulerCurrentSchedulerKey = @"RACSchedulerCurrentSchedule
 	return nil;
 }
 
+// 安排递归block
 - (RACDisposable *)scheduleRecursiveBlock:(RACSchedulerRecursiveBlock)recursiveBlock {
 	RACCompoundDisposable *disposable = [RACCompoundDisposable compoundDisposable];
 
