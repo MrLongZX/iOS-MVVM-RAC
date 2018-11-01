@@ -188,11 +188,15 @@
 	return [[RACSignal createSignal:^(id<RACSubscriber> subscriber) {
 		RACSerialDisposable *serialDisposable = [[RACSerialDisposable alloc] init];
 
+        // 订阅第一个信号
 		RACDisposable *sourceDisposable = [self subscribeNext:^(id x) {
+            // 发送第一个信号的值
 			[subscriber sendNext:x];
 		} error:^(NSError *error) {
+            // 发送第一个信号的error
 			[subscriber sendError:error];
 		} completed:^{
+            // 第一个信号发送完成，订阅第二个信号
 			RACDisposable *concattedDisposable = [signal subscribe:subscriber];
 			serialDisposable.disposable = concattedDisposable;
 		}];
@@ -206,36 +210,47 @@
 	NSCParameterAssert(signal != nil);
 
 	return [[RACSignal createSignal:^(id<RACSubscriber> subscriber) {
+        // 第一个信号是否完成
 		__block BOOL selfCompleted = NO;
+        // 存放第一个信号发送的值
 		NSMutableArray *selfValues = [NSMutableArray array];
 
+        // 第二个信号是否完成
 		__block BOOL otherCompleted = NO;
+        // 存放第二个信号发送的值
 		NSMutableArray *otherValues = [NSMutableArray array];
 
 		void (^sendCompletedIfNecessary)(void) = ^{
 			@synchronized (selfValues) {
 				BOOL selfEmpty = (selfCompleted && selfValues.count == 0);
 				BOOL otherEmpty = (otherCompleted && otherValues.count == 0);
+                // 两个信号中任意一个信号完成并且对应存放值的数组为空，那整个信号算完成
 				if (selfEmpty || otherEmpty) [subscriber sendCompleted];
 			}
 		};
 
 		void (^sendNext)(void) = ^{
 			@synchronized (selfValues) {
+                // 数组为空就返回
 				if (selfValues.count == 0) return;
 				if (otherValues.count == 0) return;
 
+                // 每次都取两个数组的第0位的值，打包成元组
 				RACTuple *tuple = RACTuplePack(selfValues[0], otherValues[0]);
 				[selfValues removeObjectAtIndex:0];
 				[otherValues removeObjectAtIndex:0];
 
+                // 把元组发送出去
 				[subscriber sendNext:tuple];
+                // 判断整个信号是否完成
 				sendCompletedIfNecessary();
 			}
 		};
 
+        // 订阅第一个信号
 		RACDisposable *selfDisposable = [self subscribeNext:^(id x) {
 			@synchronized (selfValues) {
+                // 把第一个信号的值加入到数组中
 				[selfValues addObject:x ?: RACTupleNil.tupleNil];
 				sendNext();
 			}
@@ -243,13 +258,17 @@
 			[subscriber sendError:error];
 		} completed:^{
 			@synchronized (selfValues) {
+                // 第一个信号发送完成
 				selfCompleted = YES;
+                // 判断整个信号是否完成
 				sendCompletedIfNecessary();
 			}
 		}];
 
+        // 订阅第二个信号
 		RACDisposable *otherDisposable = [signal subscribeNext:^(id x) {
 			@synchronized (selfValues) {
+                // 把第二个信号的值加入到数组中
 				[otherValues addObject:x ?: RACTupleNil.tupleNil];
 				sendNext();
 			}
@@ -257,12 +276,15 @@
 			[subscriber sendError:error];
 		} completed:^{
 			@synchronized (selfValues) {
+                // 第二个信号发送完成
 				otherCompleted = YES;
+                // 判断整个信号是否完成
 				sendCompletedIfNecessary();
 			}
 		}];
 
 		return [RACDisposable disposableWithBlock:^{
+            // 对两个信号的清理对象进行销毁
 			[selfDisposable dispose];
 			[otherDisposable dispose];
 		}];

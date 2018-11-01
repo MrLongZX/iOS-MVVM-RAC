@@ -21,12 +21,15 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [self didSignal];
+    //    [self didSignal];
     //    [self didReturnSignal];
     //    [self didEmptySignal];
     //    [self didBind];
     //    [self didBindT];
     //    [self didBindTT];
+    //    [self didConcat];
+    
+    [self didZipWith];
 }
 
 #pragma mark - 理解 RACSignal
@@ -43,9 +46,15 @@
     }];
     
     // 生成一个RACDisposable对象和一个RACSubscriber对象，RACSubscriber对象被传到createSignal方法的block中
-    [signal subscribeNext:^(id x) {
+    RACDisposable *disposable = [signal subscribeNext:^(id x) {
         NSLog(@"%@",x);
+    } error:^(NSError *error) {
+        NSLog(@"error: %@", error);
+    } completed:^{
+        NSLog(@"completed");
     }];
+    
+    [disposable dispose];
 }
 
 #pragma mark - 理解 RACReturnSignal
@@ -174,6 +183,65 @@
     
     [bindSignal subscribeNext:^(id x) {
         NSLog(@"T bindSignal : %@",x);
+    }];
+}
+
+#pragma mark - 理解 concat 方法
+// 有顺序的，第一个信号发送完成后，第二个信号才开始发送值
+- (void)didConcat
+{
+    RACSignal *signalO = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        [subscriber sendNext:@1];
+        [subscriber sendNext:@2];
+        [subscriber sendCompleted];
+        return [RACDisposable disposableWithBlock:^{
+            NSLog(@"dispose 1");
+        }];
+    }];
+    
+    RACSignal *signalT = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        [subscriber sendNext:@3];
+        [subscriber sendNext:@4];
+        [subscriber sendCompleted];
+        return [RACDisposable disposableWithBlock:^{
+            NSLog(@"dispose 2");
+        }];
+    }];
+    
+    RACSignal *concatSignal = [signalO concat:signalT];
+    
+    [concatSignal subscribeNext:^(id x) {
+        NSLog(@"subscribe value = %@",x);
+    }];
+}
+
+#pragma mark - 理解 zipWith 方法
+// 把两个信号压缩成一个信号,只有当两个信号发出一一对应信号内容时，才会触发压缩流的next事件
+- (void)didZipWith
+{
+    RACSignal *signalO = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        [subscriber sendNext:@1];
+        [subscriber sendNext:@2];
+        [subscriber sendCompleted];
+        return [RACDisposable disposableWithBlock:^{
+            NSLog(@"dispose 1");
+        }];
+    }];
+    
+    RACSignal *signalT = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        [subscriber sendNext:@3];
+        [subscriber sendNext:@4];
+        [subscriber sendNext:@5];
+        [subscriber sendCompleted];
+        return [RACDisposable disposableWithBlock:^{
+            NSLog(@"dispose 2");
+        }];
+    }];
+    
+    RACSignal *zipWithSignal = [signalO zipWith:signalT];
+    
+    [zipWithSignal subscribeNext:^(id x) {
+        NSLog(@"subscribe value = %@",x);
     }];
 }
 

@@ -54,8 +54,11 @@ static const char *cleanedSignalDescription(RACSignal *signal) {
 	self = [super init];
 	if (self == nil) return nil;
 
+    // 待转发的信号的订阅者
 	_innerSubscriber = subscriber;
+    // 待转发的信号（只是一个DTrace probes动态跟踪技术的探针）
 	_signal = signal;
+    // 订阅者的销毁对象
 	_disposable = disposable;
 
 	[self.innerSubscriber didSubscribeWithDisposable:self.disposable];

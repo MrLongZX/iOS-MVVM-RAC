@@ -27,7 +27,9 @@
 
 + (RACSignal *)createSignal:(RACDisposable * (^)(id<RACSubscriber> subscriber))didSubscribe {
 	RACDynamicSignal *signal = [[self alloc] init];
+    // 保留传入的block
 	signal->_didSubscribe = [didSubscribe copy];
+    // 返回signal对象
 	return [signal setNameWithFormat:@"+createSignal:"];
 }
 
@@ -40,7 +42,9 @@
 	subscriber = [[RACPassthroughSubscriber alloc] initWithSubscriber:subscriber signal:self disposable:disposable];
 
 	if (self.didSubscribe != NULL) {
+        // RACScheduler.subscriptionScheduler:一个全局的单例，订阅调度器
 		RACDisposable *schedulingDisposable = [RACScheduler.subscriptionScheduler schedule:^{
+            // 调用传入后保留的block，block传入一个subscriber对象
 			RACDisposable *innerDisposable = self.didSubscribe(subscriber);
 			[disposable addDisposable:innerDisposable];
 		}];
