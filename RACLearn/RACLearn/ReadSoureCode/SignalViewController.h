@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 // 学习链接：
-// [『状态』驱动的世界：ReactiveCocoa](https://draveness.me/racsignal)
+// https://draveness.me/tag/RAC/
 // https://halfrost.com/tag/rac/
 @interface SignalViewController : UIViewController
 

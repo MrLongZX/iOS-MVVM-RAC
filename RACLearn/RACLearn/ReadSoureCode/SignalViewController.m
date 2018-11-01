@@ -28,8 +28,9 @@
     //    [self didBindT];
     //    [self didBindTT];
     //    [self didConcat];
+    //    [self didZipWith];
     
-    [self didZipWith];
+    [self didMap];
 }
 
 #pragma mark - 理解 RACSignal
@@ -241,6 +242,27 @@
     RACSignal *zipWithSignal = [signalO zipWith:signalT];
     
     [zipWithSignal subscribeNext:^(id x) {
+        NSLog(@"subscribe value = %@",x);
+    }];
+}
+
+#pragma mark - 理解 Map 方法
+- (void)didMap
+{
+    RACSignal *signalO = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        [subscriber sendNext:@1];
+        [subscriber sendNext:@2];
+        [subscriber sendCompleted];
+        return [RACDisposable disposableWithBlock:^{
+            NSLog(@"dispose 1");
+        }];
+    }];
+    
+    RACSignal *mapSignal = [signalO map:^id(NSNumber *value) {
+        return @([value intValue] * 10);
+    }];
+    
+    [mapSignal subscribeNext:^(id x) {
         NSLog(@"subscribe value = %@",x);
     }];
 }
