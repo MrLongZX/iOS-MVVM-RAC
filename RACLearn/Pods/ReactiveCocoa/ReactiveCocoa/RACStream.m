@@ -88,10 +88,11 @@
 
 - (instancetype)map:(id (^)(id value))block {
 	NSCParameterAssert(block != nil);
-
+    // 获取self类型
 	Class class = self.class;
 	
 	return [[self flattenMap:^(id value) {
+        // 调用本类的return方法
 		return [class return:block(value)];
 	}] setNameWithFormat:@"[%@] -map:", self.name];
 }

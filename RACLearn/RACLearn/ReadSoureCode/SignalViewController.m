@@ -94,7 +94,7 @@
     }];
 }
 
-#pragma mark - 了解 bind 方法
+#pragma mark - 理解 bind 方法
 - (void)didBind
 {
     RACSignal *signal = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
@@ -122,7 +122,7 @@
     }];
 }
 
-#pragma mark - 了解 bind 方法
+#pragma mark - 理解 bind 方法
 - (void)didBindT
 {
     RACSignal *signal = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {

@@ -27,6 +27,7 @@
 #pragma mark Lifecycle
 
 + (RACSignal *)createSignal:(RACDisposable * (^)(id<RACSubscriber> subscriber))didSubscribe {
+    // 创建一个子类对象，动态信号类型对象
 	return [RACDynamicSignal createSignal:didSubscribe];
 }
 
