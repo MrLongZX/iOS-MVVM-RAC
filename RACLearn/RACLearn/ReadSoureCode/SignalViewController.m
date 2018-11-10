@@ -29,8 +29,9 @@
     //    [self didBindTT];
     //    [self didConcat];
     //    [self didZipWith];
-    
-    [self didMap];
+//    [self didMap];
+//    [self didMapReplace];
+    [self didReduceEach];
 }
 
 #pragma mark - 理解 RACSignal
@@ -246,7 +247,8 @@
     }];
 }
 
-#pragma mark - 理解 Map 方法
+#pragma mark - 理解 map 方法
+// 把源信号内容映射为新内容
 - (void)didMap
 {
     RACSignal *signalO = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
@@ -263,6 +265,49 @@
     }];
     
     [mapSignal subscribeNext:^(id x) {
+        NSLog(@"subscribe value = %@",x);
+    }];
+}
+
+#pragma mark - 理解 mapReplace 方法
+// 把源信号内容映射为新内容
+- (void)didMapReplace
+{
+    RACSignal *signalO = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        [subscriber sendNext:@1];
+        [subscriber sendNext:@2];
+        [subscriber sendCompleted];
+        return [RACDisposable disposableWithBlock:^{
+            NSLog(@"dispose 1");
+        }];
+    }];
+    
+    RACSignal *mapReplaceSignal = [signalO mapReplace:@"A"];
+    
+    [mapReplaceSignal subscribeNext:^(id x) {
+        NSLog(@"subscribe value = %@",x);
+    }];
+}
+
+#pragma mark - 理解 reduceEach 方法
+// 每个信号内部都聚合在一起
+- (void)didReduceEach
+{
+    RACSignal *signalO = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        // 发送的必须是RACTuple类型
+        [subscriber sendNext:[RACTuple tupleWithObjectsFromArray:@[@1, @2]]];
+        [subscriber sendNext:[RACTuple tupleWithObjectsFromArray:@[@3, @4]]];
+        [subscriber sendCompleted];
+        return [RACDisposable disposableWithBlock:^{
+            NSLog(@"dispose 1");
+        }];
+    }];
+    
+    RACSignal *mapReplaceSignal = [signalO reduceEach:^id(NSNumber *num1, NSNumber *num2){
+        return @([num1 intValue] + [num2 intValue]);
+    }];
+    
+    [mapReplaceSignal subscribeNext:^(id x) {
         NSLog(@"subscribe value = %@",x);
     }];
 }

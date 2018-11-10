@@ -67,10 +67,13 @@
 @implementation RACStream (Operations)
 
 - (instancetype)flattenMap:(RACStream * (^)(id value))block {
+    // 获取self类型
 	Class class = self.class;
 
+    // 返回绑定方法创建的信号
 	return [[self bind:^{
 		return ^(id value, BOOL *stop) {
+            // 调用flattenMap方法的block，判断返回结果是否为空
 			id stream = block(value) ?: [class empty];
 			NSCAssert([stream isKindOfClass:RACStream.class], @"Value returned from -flattenMap: is not a stream: %@", stream);
 
@@ -91,14 +94,17 @@
     // 获取self类型
 	Class class = self.class;
 	
+    // 返回flattenMap方法中绑定操作方法的信号
 	return [[self flattenMap:^(id value) {
         // 调用本类的return方法
+        // 调用map方法的block，将获取的返回值封装到信号中
 		return [class return:block(value)];
 	}] setNameWithFormat:@"[%@] -map:", self.name];
 }
 
 - (instancetype)mapReplace:(id)object {
 	return [[self map:^(id _) {
+        // 不管源信号发送什么值，只返回object
 		return object;
 	}] setNameWithFormat:@"[%@] -mapReplace: %@", self.name, [object rac_description]];
 }

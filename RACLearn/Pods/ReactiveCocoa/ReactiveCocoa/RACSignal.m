@@ -104,46 +104,63 @@
 	 * 
 	 * If any signal sends an error at any point, send that to the subscriber.
 	 */
-
+    // 创建新的信号，用来被订阅获取新值
 	return [[RACSignal createSignal:^(id<RACSubscriber> subscriber) {
+        // 获取需要返回stream类型的绑定block
 		RACStreamBindBlock bindingBlock = block();
-
+        
+        // 存储 方法调用者（self）、RACStreamBindBlock中返回的对值进行处理的信号
 		NSMutableArray *signals = [NSMutableArray arrayWithObject:self];
-
+        
+        // 复合清理对象 新信号需要返回的清理对象
 		RACCompoundDisposable *compoundDisposable = [RACCompoundDisposable compoundDisposable];
 
+        // 信号功能完成
 		void (^completeSignal)(RACSignal *, RACDisposable *) = ^(RACSignal *signal, RACDisposable *finishedDisposable) {
 			BOOL removeDisposable = NO;
 
+            // 对数组signals加同步锁
 			@synchronized (signals) {
+                // 从数组signals移除
 				[signals removeObject:signal];
 
+                // 如果数组signals中信号数量为0
 				if (signals.count == 0) {
+                    // 对新信号订阅者发送完成
 					[subscriber sendCompleted];
+                    // 对复合清理对象进行清理
 					[compoundDisposable dispose];
 				} else {
 					removeDisposable = YES;
 				}
 			}
-
+            
+            // 若removeDisposable = YES 从复合信号中清理移除功能完成的信号对应的清理对象
 			if (removeDisposable) [compoundDisposable removeDisposable:finishedDisposable];
 		};
 
 		void (^addSignal)(RACSignal *) = ^(RACSignal *signal) {
+            // 对数组signals加同步锁
 			@synchronized (signals) {
+                // 数组添加RACStreamBindBlock中返回的信号
 				[signals addObject:signal];
 			}
 
 			RACSerialDisposable *selfDisposable = [[RACSerialDisposable alloc] init];
 			[compoundDisposable addDisposable:selfDisposable];
 
+            // 对RACStreamBindBlock中返回的信号进行订阅
 			RACDisposable *disposable = [signal subscribeNext:^(id x) {
+                // 给新信号的订阅者发送signal中封装的值
 				[subscriber sendNext:x];
 			} error:^(NSError *error) {
+                // 出现错误，对复合清理对象进行清理
 				[compoundDisposable dispose];
+                // 对新信号的订阅者发送错误信号
 				[subscriber sendError:error];
 			} completed:^{
 				@autoreleasepool {
+                    // 信号绑定功能完成
 					completeSignal(signal, selfDisposable);
 				}
 			}];
@@ -152,35 +169,45 @@
 		};
 
 		@autoreleasepool {
+            //
 			RACSerialDisposable *selfDisposable = [[RACSerialDisposable alloc] init];
 			[compoundDisposable addDisposable:selfDisposable];
 
+            // 对方法调用者(也就是消息接受者)进行订阅
 			RACDisposable *bindingDisposable = [self subscribeNext:^(id x) {
 				// Manually check disposal to handle synchronous errors.
 				if (compoundDisposable.disposed) return;
 
 				BOOL stop = NO;
+                // 调用绑定block，返回对值进行处理后的信号
 				id signal = bindingBlock(x, &stop);
 
 				@autoreleasepool {
+                    // 信号不为空，调用addSignal()这个block方法，添加绑定block中创建的信号
 					if (signal != nil) addSignal(signal);
+                    // 信号为空 或 stop为YES
 					if (signal == nil || stop) {
+                        // 对serial清理对象进行清理
 						[selfDisposable dispose];
+                        // 信号绑定功能完成
 						completeSignal(self, selfDisposable);
 					}
 				}
 			} error:^(NSError *error) {
+                // 出现错误，对复合清理对象进行清理
 				[compoundDisposable dispose];
+                // 对新信号的订阅者发送错误信号
 				[subscriber sendError:error];
 			} completed:^{
 				@autoreleasepool {
+                    // 信号绑定功能完成
 					completeSignal(self, selfDisposable);
 				}
 			}];
 
 			selfDisposable.disposable = bindingDisposable;
 		}
-
+        // 新信号的RACStreamBindBlock返回清理对象
 		return compoundDisposable;
 	}] setNameWithFormat:@"[%@] -bind:", self.name];
 }
