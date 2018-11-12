@@ -29,9 +29,11 @@
     //    [self didBindTT];
     //    [self didConcat];
     //    [self didZipWith];
-//    [self didMap];
-//    [self didMapReplace];
-    [self didReduceEach];
+    //    [self didMap];
+    //    [self didMapReplace];
+    //    [self didReduceEach];
+    
+    [self didReduceApply];
 }
 
 #pragma mark - 理解 RACSignal
@@ -303,6 +305,7 @@
         }];
     }];
     
+    // 元组内几个数据，reduceBlock就几个参数
     RACSignal *mapReplaceSignal = [signalO reduceEach:^id(NSNumber *num1, NSNumber *num2){
         return @([num1 intValue] + [num2 intValue]);
     }];
@@ -310,6 +313,34 @@
     [mapReplaceSignal subscribeNext:^(id x) {
         NSLog(@"subscribe value = %@",x);
     }];
+}
+
+#pragma mark - 理解 reduceApply 方法
+// 信号的值必须是元组RACTuple
+// 每个元组的第0位必须是一个闭包
+// 后面的n位为闭包的入参，不能少于闭包参数的个数，多余的无效
+- (void)didReduceApply
+{
+    RACSignal *signalA = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        id block = ^id(NSNumber *first, NSNumber *second, NSNumber *third) {
+            return @(first.integerValue + second.integerValue * third.integerValue);
+        };
+        
+        [subscriber sendNext:RACTuplePack(block, @2, @3, @4)];
+        [subscriber sendNext:RACTuplePack((id)(^id(NSNumber *x){return @(x.integerValue * 10);}), @2, @3, @4)];
+        
+        [subscriber sendCompleted];
+        return [RACDisposable disposableWithBlock:^{
+            NSLog(@"signal dispose");
+        }];
+    }];
+    
+    RACSignal *signalB = [signalA reduceApply];
+    
+    [signalB subscribeNext:^(NSNumber *x) {
+        NSLog(@"x : %@", x);
+    }];
+    
 }
 
 @end

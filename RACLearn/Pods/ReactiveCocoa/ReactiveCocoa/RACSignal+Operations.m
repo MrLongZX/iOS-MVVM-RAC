@@ -1303,7 +1303,9 @@ static RACDisposable *subscribeForever (RACSignal *signal, void (^next)(id), voi
 
 - (RACSignal *)reduceApply {
 	return [[self map:^(RACTuple *tuple) {
+        // 传入的参数必须是元组
 		NSCAssert([tuple isKindOfClass:RACTuple.class], @"-reduceApply must only be used on a signal of RACTuples. Instead, received: %@", tuple);
+        // 元组tuple里面的元素各种至少是2个
 		NSCAssert(tuple.count > 1, @"-reduceApply must only be used on a signal of RACTuples, with at least a block in tuple[0] and its first argument in tuple[1]");
 
 		// We can't use -array, because we need to preserve RACTupleNil
@@ -1311,8 +1313,9 @@ static RACDisposable *subscribeForever (RACSignal *signal, void (^next)(id), voi
 		for (id val in tuple) {
 			[tupleArray addObject:val];
 		}
+        // 取出数组中闭包的参数
 		RACTuple *arguments = [RACTuple tupleWithObjectsFromArray:[tupleArray subarrayWithRange:NSMakeRange(1, tupleArray.count - 1)]];
-
+        // 元组第0个数据为闭包，其他为闭包的参数
 		return [RACBlockTrampoline invokeBlock:tuple[0] withArguments:arguments];
 	}] setNameWithFormat:@"[%@] -reduceApply", self.name];
 }

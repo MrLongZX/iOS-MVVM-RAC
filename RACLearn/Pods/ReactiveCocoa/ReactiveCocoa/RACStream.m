@@ -148,7 +148,9 @@
 
 	__weak RACStream *stream __attribute__((unused)) = self;
 	return [[self map:^(RACTuple *t) {
+        // 传入的参数必须是元组RACTuple类型
 		NSCAssert([t isKindOfClass:RACTuple.class], @"Value from stream %@ is not a tuple: %@", stream, t);
+        // 
 		return [RACBlockTrampoline invokeBlock:reduceBlock withArguments:t];
 	}] setNameWithFormat:@"[%@] -reduceEach:", self.name];
 }

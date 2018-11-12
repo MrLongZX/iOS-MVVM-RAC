@@ -35,23 +35,28 @@
 
 - (id)invokeWithArguments:(RACTuple *)arguments {
 	SEL selector = [self selectorForArgumentCount:arguments.count];
+    // 构造NSInvocation对象
 	NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:[self methodSignatureForSelector:selector]];
 	invocation.selector = selector;
 	invocation.target = self;
 
 	for (NSUInteger i = 0; i < arguments.count; i++) {
 		id arg = arguments[i];
+        // objc_msgSend()前两个参数为self和_cmd，所以元组中的数据作为参数要偏移2
 		NSInteger argIndex = (NSInteger)(i + 2);
 		[invocation setArgument:&arg atIndex:argIndex];
 	}
 
+    // 调用动态方法
 	[invocation invoke];
 	
 	__unsafe_unretained id returnVal;
+    // 获取动态方法执行的返回值
 	[invocation getReturnValue:&returnVal];
 	return returnVal;
 }
 
+// 根据参数一个元组RACTuple里面元素的个数，返回支持参数数量不同的选择器。最多支持元组内元素的个数是15个
 - (SEL)selectorForArgumentCount:(NSUInteger)count {
 	NSCParameterAssert(count > 0);
 
@@ -85,6 +90,7 @@
 
 - (id)performWith:(id)obj1 :(id)obj2 {
 	id (^block)(id, id) = self.block;
+    // 调用reduceBlock，将元组中的数据传进去，执行reduceBlock中我们想要的处理
 	return block(obj1, obj2);
 }
 
